@@ -1,6 +1,13 @@
-import { cloneElement, isValidElement, useEffect, useId, useMemo, useState } from 'react'
+﻿import { cloneElement, isValidElement, useEffect, useId, useMemo, useState } from 'react'
 import { createGoLedgerApi } from '../api/goledgerApi.js'
 import { createPortal } from 'react-dom'
+import arrowClockwiseIcon from 'bootstrap-icons/icons/arrow-clockwise.svg?raw'
+import clockHistoryIcon from 'bootstrap-icons/icons/clock-history.svg?raw'
+import eyeIcon from 'bootstrap-icons/icons/eye.svg?raw'
+import pencilSquareIcon from 'bootstrap-icons/icons/pencil-square.svg?raw'
+import plusLgIcon from 'bootstrap-icons/icons/plus-lg.svg?raw'
+import searchIcon from 'bootstrap-icons/icons/search.svg?raw'
+import trash3Icon from 'bootstrap-icons/icons/trash3.svg?raw'
 
 const PANEL_USERNAME = 'goledger'
 const PANEL_PASSWORD = '5NxVCAjC'
@@ -271,7 +278,23 @@ function Row({ label, children, controlId }) {
   )
 }
 
-function IconActionButton({ icon, label, tone = 'secondary', onClick, disabled = false }) {
+const BI_ICON_SVGS = {
+  'arrow-clockwise': arrowClockwiseIcon,
+  'clock-history': clockHistoryIcon,
+  eye: eyeIcon,
+  'pencil-square': pencilSquareIcon,
+  'plus-lg': plusLgIcon,
+  search: searchIcon,
+  trash3: trash3Icon
+}
+
+function BiIcon({ name, className, ariaHidden = true }) {
+  const svg = BI_ICON_SVGS[name]
+  if (!svg) return null
+  return <span className={className} aria-hidden={ariaHidden} dangerouslySetInnerHTML={{ __html: svg }} />
+}
+
+function IconActionButton({ iconName, label, tone = 'secondary', onClick, disabled = false }) {
   const toneClass =
     tone === 'danger'
       ? ' managerActionBtn--danger'
@@ -280,7 +303,7 @@ function IconActionButton({ icon, label, tone = 'secondary', onClick, disabled =
         : ''
   return (
     <button type="button" className={`managerActionBtn${toneClass}`} onClick={onClick} title={label} aria-label={label} disabled={disabled}>
-      <i className={`bi ${icon}`} aria-hidden="true" />
+      <BiIcon name={iconName} />
     </button>
   )
 }
@@ -2345,7 +2368,7 @@ export default function PainelCadastroPage() {
                             onClick={() => removeCreateTvShowSeason(seasonIndex)}
                             disabled={seasons.length <= 1}
                           >
-                            <i className="bi bi-trash3"></i>
+                            <BiIcon name="trash3" className="me-2" />
                             Remover temporada
                           </button>
                         </div>
@@ -2398,7 +2421,7 @@ export default function PainelCadastroPage() {
                                     onClick={() => removeCreateTvShowEpisode(seasonIndex, episodeIndex)}
                                     disabled={false}
                                   >
-                                    <i className="bi bi-trash3"></i>
+                                    <BiIcon name="trash3" className="me-2" />
                                     Remover episodio
                                   </button>
                                 </div>
@@ -2936,7 +2959,7 @@ export default function PainelCadastroPage() {
 
         <div className="painelCadastroPage__actions">
           <button type="button" className="btn btn-outline-light" onClick={loadCatalog} disabled={catalogStatus === 'loading' || !canUsePanel}>
-            <i className="bi bi-arrow-clockwise me-2" aria-hidden="true" />
+            <BiIcon name="arrow-clockwise" className="me-2" />
             {catalogStatus === 'loading' ? 'Atualizando...' : 'Atualizar listas'}
           </button>
           <button
@@ -2948,7 +2971,7 @@ export default function PainelCadastroPage() {
             }}
             disabled={!canUsePanel}
           >
-            <i className="bi bi-plus-lg me-2" aria-hidden="true" />
+            <BiIcon name="plus-lg" className="me-2" />
             Cadastrar
           </button>
         </div>
@@ -2991,7 +3014,7 @@ export default function PainelCadastroPage() {
                       <label className="form-label" htmlFor="updateListFilter">Buscar item</label>
                       <div className="input-group managerSearchGroup">
                     <span className="input-group-text managerSearchGroup__icon">
-                      <i className="bi bi-search" aria-hidden="true" />
+                      <BiIcon name="search" />
                     </span>
                     <input
                       id="updateListFilter"
@@ -3056,13 +3079,13 @@ export default function PainelCadastroPage() {
                             <td className="text-end">
                               <div className="managerRow__actions" role="group" aria-label="Ações">
                                 <IconActionButton
-                                  icon="bi-pencil-square"
+                                  iconName="pencil-square"
                                   label="Editar"
                                   tone="primary"
                                   onClick={(e) => { e.stopPropagation(); openEditItem(updateAssetType, option.value) }}
                                 />
                                 <IconActionButton
-                                  icon="bi-eye"
+                                  iconName="eye"
                                   label="Detalhes"
                                   onClick={async (e) => {
                                     e.stopPropagation()
@@ -3072,7 +3095,7 @@ export default function PainelCadastroPage() {
                                   }}
                                 />
                                 <IconActionButton
-                                  icon="bi-clock-history"
+                                  iconName="clock-history"
                                   label="Histórico"
                                   onClick={async (e) => {
                                     e.stopPropagation()
@@ -3082,7 +3105,7 @@ export default function PainelCadastroPage() {
                                   }}
                                 />
                                 <IconActionButton
-                                  icon="bi-trash3"
+                                  iconName="trash3"
                                   label="Excluir"
                                   tone="danger"
                                   onClick={(e) => { e.stopPropagation(); openDeleteItem(updateAssetType, option.value) }}
@@ -3117,8 +3140,10 @@ export default function PainelCadastroPage() {
                       className="managerPagination__button"
                       onClick={() => setUpdateListPage((prev) => Math.max(1, prev - 1))}
                       disabled={currentUpdatePage === 1}
+                      aria-label="Anterior"
+                      title="Anterior"
                     >
-                      Anterior
+                      {'<'}
                     </button>
 
                     {currentPageNumbers.map((pageNumber, index) => {
@@ -3144,8 +3169,10 @@ export default function PainelCadastroPage() {
                       className="managerPagination__button"
                       onClick={() => setUpdateListPage((prev) => Math.min(totalUpdatePages, prev + 1))}
                       disabled={currentUpdatePage === totalUpdatePages}
+                      aria-label="Próxima"
+                      title="Próxima"
                     >
-                      Próxima
+                      {'>'}
                     </button>
                   </div>
                 </div>
@@ -3364,7 +3391,7 @@ export default function PainelCadastroPage() {
                 Cancelar
               </button>
               <button type="button" className="btn btn-danger-soft" onClick={runDelete} disabled={deleteAssetState.status === 'loading'}>
-                <i className="bi bi-trash3"></i>
+                <BiIcon name="trash3" className="me-2" />
                 {deleteAssetState.status === 'loading' ? 'Excluindo...' : 'Excluir'}
               </button>
             </>

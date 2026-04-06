@@ -2365,30 +2365,20 @@ body.route--painel #root,
   cursor: pointer;
   transition: all 180ms ease;
 }
-.managerRow:hover td,
-.managerRow--active td,
-.managerRow:focus td {
-  background: color-mix(in srgb, var(--panel-accent) 12%, transparent);
-}
 .managerRow--active td,
 .managerRow:focus td {
   background: color-mix(in srgb, var(--panel-accent) 18%, transparent);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
 }
-.managerRow:hover td:first-child,
 .managerRow--active td:first-child {
   box-shadow: inset 4px 0 0 var(--panel-accent);
 }
-.managerRow:hover .managerRow__title,
 .managerRow--active .managerRow__title {
   color: #fff;
-  transform: translateX(2px);
 }
-.managerRow:hover .managerRow__meta,
 .managerRow--active .managerRow__meta {
   color: #fff;
 }
-.managerRow:hover .managerRow__key,
 .managerRow--active .managerRow__key {
   color: rgba(255, 255, 255, 0.7);
 }
@@ -2507,6 +2497,10 @@ body.route--painel #root,
   position: relative;
   overflow: hidden;
 }
+.managerActionBtn svg {
+  width: 16px;
+  height: 16px;
+}
 .managerActionBtn::before {
   content: '';
   position: absolute;
@@ -2598,11 +2592,15 @@ body.route--painel #root,
   }
   .managerRow__actions {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
   }
   .managerRow__item,
   .managerRow__metaCell {
     min-width: 0;
+  }
+  .managerRow__item,
+  .managerRow__metaCell {
+    text-align: center;
   }
   .managerPagination {
     flex-direction: column;
@@ -2691,18 +2689,49 @@ body.route--painel #root,
 }
 @media (max-width: 720px) {
   .painelCadastroPage__summaryGrid--top {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 @media (max-width: 380px) {
   .painelCadastroPage__summaryGrid--top {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 .painelCadastroPage__mainPanel {
   margin-top: 22px;
 }
 @media (max-width: 640px) {
+  .painelCadastroPage__topbar {
+    gap: 14px;
+  }
+  .painelCadastroPage__topbarInfo,
+  .painelCadastroPage__actions {
+    width: 100%;
+  }
+  .painelCadastroPage__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .painelCadastroPage__actions .btn {
+    width: 100%;
+    min-width: 0;
+    padding: 0 14px;
+  }
+  .painelCadastroPage__summaryGrid--top {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .summaryCard {
+    padding: 14px 12px;
+  }
+  .summaryCard__label {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+  .summaryCard__value {
+    font-size: clamp(18px, 5vw, 24px);
+  }
   .managerList {
     max-height: none;
     overflow: visible;
@@ -2720,11 +2749,45 @@ body.route--painel #root,
     min-width: 42px;
     height: 42px;
   }
-  .page--panel .managerActionBtn i {
-    font-size: 16px;
+  .page--panel .managerActionBtn svg {
+    width: 16px;
+    height: 16px;
   }
   .managerRow__actions {
     gap: 10px;
+  }
+  .managerPagination {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 10px 12px 8px;
+    overflow-x: hidden;
+  }
+  .managerPagination__summary {
+    font-size: 11px;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .managerPagination__controls {
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    max-width: 100%;
+    justify-content: center;
+  }
+  .managerPagination__group {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .managerPagination__ellipsis {
+    font-size: 11px;
+  }
+  .managerPagination__button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
   }
 }
 .painelCadastroPage__advanced {
@@ -2934,7 +2997,7 @@ body.route--painel #root,
     grid-template-columns: 1fr;
   }
   .painelCadastroPage__summaryGrid--top {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 .choiceGrid {
