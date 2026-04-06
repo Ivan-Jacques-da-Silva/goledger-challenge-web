@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.vite/
+
+.env
+.env.*
+
+contexto-desafio.md
+3mail-goledger.md
+ANALISE_ROTAS.md
